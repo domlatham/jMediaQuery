@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Domlatham / jMediaQuery</title>
+    <style type="text/css">
+      .visible-sm, .visible-md, .visible-lg{
+        display:none;
+      }
+      @media (max-width: 480px) {
+         .visible-sm{
+           display: block;
+         }
+      }
+      @media (min-width: 481px) and (max-width: 960px) {
+         .visible-md{
+           display: block;
+         }
+      }
+      @media (min-width: 960px) {
+         .visible-lg{
+           display: block;
+         }
+      }
+    </style>
+  </head>
+  <body>
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        //Add media_size function to jQuery
+        (function ($) { 
+          $.fn.media_size = function () {
+            //the default port size
+            var size = 'lg';
+            //the sizes used in the css
+            var sizes = ['sm','md','lg'];
+            //loop over to find which is not hidden
+            for (var i = sizes.length - 1; i >= 0; i--) {
+             if($('#media_test .visible-'+sizes[i]).css("display").indexOf('none') == -1){
+              size = sizes[i];
+              break;
+             };
+            };
+            //add a new class to the body tag
+            $('body').removeClass(sizes.join(' ')).addClass(size);
+          }
+        }(jQuery));
+
+        //do it on window.resize
+        $(window).resize(function(){
+          $(document).media_size();
+        });
+
+        //do it now (document.ready)
+        $(document).media_size();
+
+        //some simple jQuery to show how it can be used
+        $('.sm a').click(function(e){
+          e.preventDefault();
+          alert('Media queries say I\'m a small viewport');
+        });
+
+        $('.lg a').click(function(e){ 
+          e.preventDefault();
+          alert('Media queries say I\'m a large viewport');
+        });
+
+      });
+    </script>
+
+    <a href="#">how big is this viewport?</a>
+
+    <!-- 
+      Add these nodes to the document so we can test the media queries.
+      Keep the spans inline and empty so that they are not visible.
+    -->
+    <span id="media_test">
+      <span class="visible-sm"></span>
+      <span class="visible-md"></span>
+      <span class="visible-lg"></span>
+    </span>
+
+  </body>
+</html>
+
+    
